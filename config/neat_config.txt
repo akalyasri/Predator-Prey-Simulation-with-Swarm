@@ -1,4 +1,7 @@
-# https://neat-python.readthedocs.io/en/latest/config_file.html
+# All parameters used are directly referenced from:
+# NEAT-Python official docs: https://neat-python.readthedocs.io/en/latest/config_file.html
+# NEAT-Python examples (CartPole, XOR): https://github.com/CodeReclaimers/neat-python/tree/master/examples
+# Stanley & Miikkulainen (2002): sections 3.2-3.4 on mutation rates, speciation, and structural growth
 
 [NEAT]
 # Core evolution settings - top level
@@ -7,24 +10,43 @@ fitness_criterion     = max
 fitness_threshold     = 1000
 reset_on_extinction   = True
 no_fitness_termination = False
+
 # Optional: fixes randomization for reproducibility -> for consistent results
 seed = 42
 
 [DefaultGenome]
 # Neural network structure and mutation rules - how each agent’s brain evolves
-num_inputs             = 5       # example: relative x, y, wall dist, bias, etc.
-num_outputs            = 2       # velocity x, y
-num_hidden             = 0       # optional: start with 0 so neat can add layers later
-feed_forward           = True    # optional: prevents recurrent loops -> simpler and stable for our simulation
-initial_connection     = full_nodirect  #optional: gives neat a functioning network immediately
+
+# example: relative x, y, wall dist, bias, etc.
+num_inputs             = 5       
+
+# velocity x, y
+num_outputs            = 2       
+
+# optional: start with 0 so neat can add layers later
+num_hidden             = 0       
+
+# optional: prevents recurrent loops -> simpler and stable for our simulation
+feed_forward           = True    
+
+#optional: gives neat a functioning network immediately
+initial_connection     = full_nodirect  
 
 # Activation options
-activation_default     = tanh                   # default node activation function
-activation_mutate_rate = 0.1                    # optional: adds diversity
-activation_options     = tanh sigmoid relu      # optional: adds flexibility - functions neat can choose from
+
+# default node activation function
+activation_default     = tanh                   
+
+# optional: adds diversity
+activation_mutate_rate = 0.1   
+
+# optional: adds flexibility - functions neat can choose from                
+activation_options     = tanh sigmoid relu      
 
 # Aggregation options   
-aggregation_default    = sum        # optional: how inputs to a node are combined - "sum" is standard
+
+# optional: how inputs to a node are combined - "sum" is standard
+aggregation_default    = sum        
 aggregation_mutate_rate = 0.0       
 aggregation_options    = sum
 
@@ -49,6 +71,13 @@ weight_replace_rate    = 0.1
 weight_min_value       = -5.0
 weight_max_value       = 5.0
 
+
+# Connection enabled/disabled mutation settings - needed to run code
+enabled_default = True
+enabled_mutate_rate = 0.01
+enabled_rate_to_false_add = 0.0
+enabled_rate_to_true_add = 0.0
+
 # Structural mutation - defines how topology changes -> how neat adds/removes connections or nodes
 node_add_prob          = 0.05
 node_delete_prob       = 0.01
@@ -60,6 +89,17 @@ structural_mutation_surer   = default
 # Compatibility coefficients - how neat decides species similarity -> needed for neat speciation
 compatibility_disjoint_coefficient = 1.0
 compatibility_weight_coefficient   = 0.5
+
+
+# Response multiplier parameters - needed in order to run code
+response_init_mean = 1.0
+response_init_stdev = 0.0
+response_init_type = gaussian
+response_max_value = 30.0
+response_min_value = -30.0
+response_mutate_power = 0.0
+response_mutate_rate = 0.0
+response_replace_rate = 0.0
 
 [DefaultSpeciesSet] 
 # Speciation settings - controls how genomes are grouped into species -> new structures are compared to existing ones; if they’re too different, they form a new species
