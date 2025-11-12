@@ -1,0 +1,78 @@
+# https://neat-python.readthedocs.io/en/latest/config_file.html
+
+[NEAT]
+# Core evolution settings - top level
+pop_size              = 100
+fitness_criterion     = max
+fitness_threshold     = 1000
+reset_on_extinction   = True
+no_fitness_termination = False
+# Optional: fixes randomization for reproducibility -> for consistent results
+seed = 42
+
+[DefaultGenome]
+# Neural network structure and mutation rules - how each agent’s brain evolves
+num_inputs             = 5       # example: relative x, y, wall dist, bias, etc.
+num_outputs            = 2       # velocity x, y
+num_hidden             = 0       # optional: start with 0 so neat can add layers later
+feed_forward           = True    # optional: prevents recurrent loops -> simpler and stable for our simulation
+initial_connection     = full_nodirect  #optional: gives neat a functioning network immediately
+
+# Activation options
+activation_default     = tanh                   # default node activation function
+activation_mutate_rate = 0.1                    # optional: adds diversity
+activation_options     = tanh sigmoid relu      # optional: adds flexibility - functions neat can choose from
+
+# Aggregation options   
+aggregation_default    = sum        # optional: how inputs to a node are combined - "sum" is standard
+aggregation_mutate_rate = 0.0       
+aggregation_options    = sum
+
+# Node bias parameters - controls how neat mutates the internal connection weights and biases
+# Can leave these defaults out but including them gives us explicit control and reproducibility
+bias_init_mean         = 0.0
+bias_init_stdev        = 1.0
+bias_init_type         = gaussian
+bias_mutate_power      = 0.5
+bias_mutate_rate       = 0.7
+bias_replace_rate      = 0.1
+bias_min_value         = -5.0
+bias_max_value         = 5.0
+
+# Weight parameters 
+weight_init_mean       = 0.0
+weight_init_stdev      = 1.0
+weight_init_type       = gaussian
+weight_mutate_power    = 0.5
+weight_mutate_rate     = 0.8
+weight_replace_rate    = 0.1
+weight_min_value       = -5.0
+weight_max_value       = 5.0
+
+# Structural mutation - defines how topology changes -> how neat adds/removes connections or nodes
+node_add_prob          = 0.05
+node_delete_prob       = 0.01
+conn_add_prob          = 0.2
+conn_delete_prob       = 0.05
+single_structural_mutation = False
+structural_mutation_surer   = default
+
+# Compatibility coefficients - how neat decides species similarity -> needed for neat speciation
+compatibility_disjoint_coefficient = 1.0
+compatibility_weight_coefficient   = 0.5
+
+[DefaultSpeciesSet] 
+# Speciation settings - controls how genomes are grouped into species -> new structures are compared to existing ones; if they’re too different, they form a new species
+compatibility_threshold = 3.0
+
+[DefaultStagnation]
+# Species stagnation control - removes species that stop improving -> neat kills them off after several generations
+species_fitness_func = max
+max_stagnation       = 15
+species_elitism      = 2
+
+[DefaultReproduction]
+# Reproduction settings - how offspring are generated -> controls how many predators survive
+elitism             = 2
+survival_threshold  = 0.3
+min_species_size    = 2
