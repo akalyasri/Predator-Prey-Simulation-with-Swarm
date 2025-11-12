@@ -1,2 +1,6 @@
 # Virtual environment - if your folder is named differently, adjust accordingly here:
 .venv/
+
+__pycache__/
+*.py[cod]
+*$py.class
