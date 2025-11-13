@@ -11,7 +11,7 @@ def _preprocess_obs(obs: Sequence[float]) -> np.ndarray:
     
     return np.asarray(obs, dtype=np.float32)
 
-def make_neat_controller(
+def make_controller(
     genome: neat.DefaultGenome,
     config: neat.Config,
     speed: float = 2.0,

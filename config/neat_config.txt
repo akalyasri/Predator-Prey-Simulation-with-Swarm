@@ -7,7 +7,9 @@
 # Core evolution settings - top level
 pop_size              = 100
 fitness_criterion     = max
-fitness_threshold     = 1000
+
+# increased threshold from 1000 to 3000 to force evolution
+fitness_threshold     = 3000    
 reset_on_extinction   = True
 no_fitness_termination = False
 

@@ -6,9 +6,9 @@ import numpy as np
 import neat
 
 # import environment pieces
-from src.env_test.simulation import run_episode, EpisodeResult
-from src.env_test.environment import Environment
-from src.controllers import make_neat_controller
+from .env_test.simulation import run_episode, EpisodeResult
+from .env_test.environment import Environment
+from .controllers import make_neat_controller
 
 # simple baseline prey (same logic as test_sim.py)
 def prey_escape(obs):
