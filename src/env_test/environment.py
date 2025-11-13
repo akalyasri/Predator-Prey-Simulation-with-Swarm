@@ -1,6 +1,6 @@
 # 2D world for the predator and prey - goal is to model movement, distance calculation, and capture detection
 import numpy as np
-from agent import Agent
+from .agent import Agent
 
 class Environment:
 

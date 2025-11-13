@@ -19,8 +19,12 @@ def plot_episode(ep, save_path=None):
     plt.title(f"Predator-Prey Trajectory (Steps: {ep.steps}, Captured: {ep.captured})")
     plt.xlabel("X Position")
     plt.ylabel("Y Position")
+    
     plt.xlim(0, 100)
     plt.ylim(0, 100)
+    #plt.autoscale() # autoscale axes to fit all points
+    plt.gca().set_aspect('equal', adjustable='box') # fixes distortion
+
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.4)
     plt.tight_layout()

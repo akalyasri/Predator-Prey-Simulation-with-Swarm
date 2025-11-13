@@ -17,8 +17,8 @@ seed = 42
 [DefaultGenome]
 # Neural network structure and mutation rules - how each agent’s brain evolves
 
-# example: relative x, y, wall dist, bias, etc.
-num_inputs             = 5       
+# example: relative x, y, wall dist, bias
+num_inputs             = 4       
 
 # velocity x, y
 num_outputs            = 2       

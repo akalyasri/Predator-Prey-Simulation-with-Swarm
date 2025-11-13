@@ -1,6 +1,6 @@
 # runs one episode of predatory and prey interaction
 from dataclasses import dataclass
-from environment import Environment
+from .environment import Environment
 
 @dataclass
 class EpisodeResult:
