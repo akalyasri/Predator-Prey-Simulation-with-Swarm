@@ -6,9 +6,9 @@ import numpy as np
 import neat
 
 # import environment pieces
-from .env_test.simulation import run_episode, EpisodeResult
-from .env_test.environment import Environment
-from .controllers import make_neat_controller
+from src.core.simulation import run_episode, EpisodeResult
+from src.core.environment import Environment
+from src.neat_utils.controllers import make_controller
 
 # simple baseline prey (same logic as test_sim.py)
 def prey_escape(obs):
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     # 2. sample a random genome and wrap it as a predator controller
     genome = sample_random_genome(config)
-    pred_ctrl = make_neat_controller(genome, config, speed=2.0)
+    pred_ctrl = make_controller(genome, config, speed=2.0)
 
     # 3. run one episode vs greedy prey
     ep = run_episode(pred_ctrl, prey_escape, env=Environment(), T=500, capture_radius=5.0)
@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     # 4. output plot
     try:
-        from src.env_test.visualize_episode import plot_episode
+        from src.tests.env.visualize_episode import plot_episode
         plot_episode(ep, save_path="results/neat_integration.png")
     except Exception as e:
         print(f"(Plot skipped) {e}")

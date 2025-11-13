@@ -1,9 +1,9 @@
 # test for verifying predator/prey fitness works
 
-from src.env_test.environment import Environment
-from src.env_test.simulation import run_episode
-from src.dummy_controllers import pred_dummy, prey_dummy
-from src.fitness import predator_fitness, prey_fitness
+from src.core.environment import Environment
+from src.core.simulation import run_episode
+from src.neat_utils.dummy_controllers import pred_dummy, prey_dummy
+from src.neat_utils.fitness import predator_fitness, prey_fitness
 
 # print("Initializing environment") - DEBUGGING
 env = Environment()

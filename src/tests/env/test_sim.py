@@ -1,6 +1,6 @@
 # for testing 
 import numpy as np
-from .simulation import run_episode
+from src.core.simulation import run_episode
 
 # predator moves toward the prey based on relative position
 def predator_greedy(obs):

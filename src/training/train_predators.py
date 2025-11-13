@@ -4,11 +4,11 @@ import neat
 import pickle
 from statistics import mean
 
-from src.env_test.environment import Environment
-from src.env_test.simulation import run_episode
-from src.controllers import make_controller
-from src.dummy_controllers import prey_dummy
-from src.fitness import predator_fitness
+from src.core.environment import Environment
+from src.core.simulation import run_episode
+from src.neat_utils.controllers import make_controller
+from src.neat_utils.dummy_controllers import prey_dummy
+from src.neat_utils.fitness import predator_fitness
 
 # save results
 os.makedirs("results/predator_training", exist_ok=True)
