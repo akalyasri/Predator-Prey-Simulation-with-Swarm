@@ -8,6 +8,7 @@ from src.core.environment import Environment
 from src.core.simulation import run_episode
 from src.neat_utils.controllers import make_controller
 from src.neat_utils.dummy_controllers import prey_dummy
+from src.neat_utils.dummy_controllers import GreedyPreyDummy
 from src.neat_utils.fitness import predator_fitness
 
 # save results
@@ -25,16 +26,33 @@ def evaluate_genomes(genomes, config):
         episode_fitnesses = []
 
         for _ in range(5):          # 5 episodes per genome
-            env = Environment()     # fresh environment each time
+            env = Environment(
+                num_obstacles=3,
+                min_r=4.0,
+                max_r=12.0
+            )     # fresh environment each time
+
+            prey_ctrl = GreedyPreyDummy(env)
 
             ep = run_episode(
                 predator_ctrl,
-                prey_dummy,        # fixed prey
+                prey_ctrl,        # fixed prey
                 env,
                 T=400              # shorter than 500 to speed training
             )
+            
+            # reward faster captures:
+            reward_capture = 400 if ep.captured else 0
 
-            episode_fitnesses.append(predator_fitness(ep))
+            # reward getting closer (inverse distance)
+            reward_distance = max(0, 120 - ep.final_distance * 15)
+
+            # penalize long chases (we want efficient hunting)
+            reward_time = max(0, 300 - ep.steps)
+
+            fitness = reward_capture + reward_distance + reward_time
+            episode_fitnesses.append(fitness)
+
 
         # use mean fitness across episodes
         genome.fitness = mean(episode_fitnesses)

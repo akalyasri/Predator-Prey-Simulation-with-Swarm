@@ -24,3 +24,18 @@ def prey_fitness(ep):
     capture_penalty = -500 if ep.captured else 0
 
     return base + dist_bonus + capture_penalty
+
+def prey_fitness_against_predator(ep):
+    
+    # higher fitness for surviving more time and ending far from predator
+    
+
+    survival_bonus = ep.steps             # max 500
+    distance_bonus = ep.final_distance    # typically 0–100
+
+    # if prey survives entire episode -> huge reward
+    if not ep.captured:
+        return survival_bonus * 2 + distance_bonus
+
+    # if captured early -> punish
+    return survival_bonus * 0.5 + distance_bonus

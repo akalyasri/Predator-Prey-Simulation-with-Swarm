@@ -20,7 +20,7 @@ seed = 42
 # Neural network structure and mutation rules - how each agent’s brain evolves
 
 # example: relative x, y, wall dist, bias
-num_inputs             = 4       
+num_inputs             = 6      
 
 # velocity x, y
 num_outputs            = 2       

@@ -4,14 +4,19 @@ from src.core.simulation import run_episode
 
 # predator moves toward the prey based on relative position
 def predator_greedy(obs):
-    dx, dy, dist, bias = obs
-    step = np.array([dx, dy])
-    step = step / (np.linalg.norm(step) + 1e-8)
-    return step * 2.0  # speed
+    dx, dy = obs[0], obs[1]
+    v = np.array([dx, dy])
+    
+    scalar_norm = np.linalg.norm(v)
+
+    if scalar_norm > 0:
+        return (v / scalar_norm) * 2.0
+    else:
+        return np.zeros(2)
 
 # prey always moves directly away from predator
 def prey_escape(obs):
-    dx, dy, dist, bias = obs
+    dx, dy = obs[0], obs[1]
     step = -np.array([dx, dy])
     step = step / (np.linalg.norm(step) + 1e-8)
     return step * 1.8   #fixed speed
