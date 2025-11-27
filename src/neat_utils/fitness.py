@@ -27,15 +27,25 @@ def prey_fitness(ep):
 
 def prey_fitness_against_predator(ep):
     
-    # higher fitness for surviving more time and ending far from predator
-    
+    import numpy as np
 
-    survival_bonus = ep.steps             # max 500
-    distance_bonus = ep.final_distance    # typically 0–100
+    # 1. survive as long as possible
+    fitness = ep.steps * 2.0   # up to 1000
 
-    # if prey survives entire episode -> huge reward
-    if not ep.captured:
-        return survival_bonus * 2 + distance_bonus
+    # 2. average distance during the whole episode
+    dists = [np.linalg.norm(pred - prey) for pred, prey in ep.trace]
+    avg_distance = np.mean(dists)
+    fitness += avg_distance
 
-    # if captured early -> punish
-    return survival_bonus * 0.5 + distance_bonus
+    # 3. reward movement -> prevents freezing
+    prey_positions = np.array([prey for _, prey in ep.trace])
+    deltas = np.diff(prey_positions, axis=0)
+    step_magnitudes = np.linalg.norm(deltas, axis=1)
+    total_motion = np.sum(step_magnitudes)
+    fitness += 0.5 * total_motion
+
+    # 4. penalty if caught
+    if ep.captured:
+        fitness -= 800
+
+    return fitness

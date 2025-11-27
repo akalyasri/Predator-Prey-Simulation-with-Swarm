@@ -27,7 +27,15 @@ def run_episode(pred_controller, prey_controller,
         a_prey = prey_controller(obs_prey)
 
         _, info = env.step(a_pred, a_prey)
-        trace.append(info["positions"])
+        
+        # trace.append(info["positions"]) - changing to below to improve pred behavior
+        trace.append({
+            "pred_pos": info["positions"][0],
+            "prey_pos": info["positions"][1],
+            "pred_vel": info["pred_vel"],   
+            "prey_vel": info["prey_vel"],   
+            "distance": info["distance"],
+        })
         
         if info["captured"]:
             return EpisodeResult(t+1, True, info["distance"], trace)
