@@ -31,9 +31,9 @@ def run_episode(pred_controller, prey_controller,
         # trace.append(info["positions"]) - changing to below to improve pred behavior
         trace.append({
             "pred_pos": info["positions"][0],
-            "prey_pos": info["positions"][1],
-            "pred_vel": info["pred_vel"],   
-            "prey_vel": info["prey_vel"],   
+            "prey_pos": info["positions"][1], 
+            "pred_vel": info["pred_vel"],
+            "prey_vel": info["prey_vel"],
             "distance": info["distance"],
         })
         

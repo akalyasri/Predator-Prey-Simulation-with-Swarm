@@ -33,8 +33,9 @@ def load_config():
 
 
 def plot_episode_with_obstacles(ep, env, save_path):
-    preds = np.array([p for p, _ in ep.trace])
-    preys = np.array([q for _, q in ep.trace])
+    preds = np.array([step["pred_pos"] for step in ep.trace])
+    preys = np.array([step["prey_pos"] for step in ep.trace])
+
 
     plt.figure(figsize=(8, 7))
 
@@ -81,8 +82,8 @@ def main():
     predator_genome = load_genome(PRED_PATH)
     prey_genome = load_genome(PREY_PATH)
 
-    predator_ctrl = make_controller(predator_genome, config, speed=2.5)
-    prey_ctrl = make_controller(prey_genome, config, speed=1.8)
+    predator_ctrl = make_controller(predator_genome, config, speed=3.2)
+    prey_ctrl = make_controller(prey_genome, config, speed=1.5)
 
     # run simulation
     env = Environment()
@@ -90,7 +91,8 @@ def main():
 
     # DEBUGGING
     print("\nPrey path deltas (movement each step):")
-    prey_path = [q for _, q in ep.trace]
+    prey_path = [step["prey_pos"] for step in ep.trace]
+
     for i in range(1, len(prey_path)):
         dx = prey_path[i][0] - prey_path[i-1][0]
         dy = prey_path[i][1] - prey_path[i-1][1]

@@ -65,7 +65,7 @@ class Environment:
             if not self.collides_with_obstacle(px, py):
                 break
 
-        self.predator = Agent(px, py, speed=2.0)
+        self.predator = Agent(px, py, speed=2.5)
 
         while True:
             qx = np.random.uniform(0, self.width)
@@ -73,7 +73,7 @@ class Environment:
             if not self.collides_with_obstacle(qx, qy):
                 break
 
-        self.prey = Agent(qx, qy, speed=1.8)
+        self.prey = Agent(qx, qy, speed=1.5)
 
     
             
@@ -212,10 +212,15 @@ class Environment:
         
         dist = self.distance()
         captured = dist < self.capture_radius
+
+        pred_vel = np.array(pred_action)
+        prey_vel = np.array(prey_action)
         
         # returns new observations and info dict with distance and capture status
         return self.observe(), {"distance": dist, 
                                 "captured": captured,
-                                "positions": (self.predator.position(), self.prey.position())
+                                "positions": (self.predator.position(), self.prey.position()),
+                                "pred_vel": pred_vel,
+                                "prey_vel": prey_vel
                                 }
     

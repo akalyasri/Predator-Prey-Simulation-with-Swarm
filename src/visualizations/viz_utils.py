@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def plot_episode_with_obstacles(ep, env, save_path=None):
-    preds = np.array([p for p, _ in ep.trace])
-    preys = np.array([q for _, q in ep.trace])
+    preds = np.array([step["pred_pos"] for step in ep.trace])
+    preys = np.array([step["prey_pos"] for step in ep.trace])
 
     plt.figure(figsize=(7, 7))
 

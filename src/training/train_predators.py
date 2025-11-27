@@ -20,7 +20,7 @@ def evaluate_genomes(genomes, config):
         genome.fitness = 0.0
 
         # build predator controller for this genome
-        predator_ctrl = make_controller(genome, config, speed=2.5)
+        predator_ctrl = make_controller(genome, config, speed=3.2)
 
         # run multiple episodes for stability
         episode_fitnesses = []

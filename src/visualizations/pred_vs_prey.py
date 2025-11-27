@@ -45,6 +45,10 @@ def main():
     # run a single visualization episode
     ep = run_episode(pred_ctrl, prey_ctrl, env, T=500)
 
+    print("\nDEBUG TRACE ENTRY:")
+    print(ep.trace[0])
+    print(ep.trace[1])
+
     print("\n---- Predator vs Evolved Prey ----")
     print(f"Steps: {ep.steps}")
     print(f"Captured: {ep.captured}")

@@ -32,7 +32,7 @@ def evaluate_genomes(genomes, config):
     for gid, genome in genomes:
         genome.fitness = 0.0
 
-        prey_ctrl = make_controller(genome, config, speed=1.8)
+        prey_ctrl = make_controller(genome, config, speed=1.5)
         episode_scores = []
 
         for _ in range(5):   # evaluate each prey 5 times for stability
