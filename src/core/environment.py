@@ -58,22 +58,26 @@ class Environment:
             self.obstacles.append(Obstacle(x, y, r))
 
 
-        # place predator and prey randomly outside obstacles
+        # place predator first
         while True:
-            px = np.random.uniform(0, self.width)
-            py = np.random.uniform(0, self.height)
+            px = np.random.uniform(20, self.width - 20)
+            py = np.random.uniform(20, self.height - 20)
             if not self.collides_with_obstacle(px, py):
                 break
 
         self.predator = Agent(px, py, speed=2.0)
 
+        # place prey NEAR predator (within ±40 units)
         while True:
-            qx = np.random.uniform(0, self.width)
-            qy = np.random.uniform(0, self.height)
-            if not self.collides_with_obstacle(qx, qy):
-                break
+            qx = px + np.random.uniform(-40, 40)
+            qy = py + np.random.uniform(-40, 40)
 
-        self.prey = Agent(qx, qy, speed=1.3)
+            # must stay inside world bounds
+            if 0 <= qx <= self.width and 0 <= qy <= self.height:
+                if not self.collides_with_obstacle(qx, qy):
+                    break
+
+        self.prey = Agent(qx, qy, speed=1.1)
 
     
             

@@ -7,6 +7,7 @@ from src.core.environment import Environment
 from src.core.simulation import run_episode
 from src.neat_utils.controllers import make_controller
 from src.visualizations.viz_utils import plot_episode_with_obstacles
+from src.neat_utils.dummy_controllers import GreedyPreyDummy
 
 
 PRED_PATH = "results/predator_training/best_predator.pkl"
@@ -35,12 +36,17 @@ def main():
         CONFIG_PATH
     )
 
-    # load trained predator and prey
-    pred_ctrl = load_network(PRED_PATH, config)
-    prey_ctrl = load_network(PREY_PATH, config)
-
     # new environment with obstacles
     env = Environment(num_obstacles=3)
+
+    # load trained predator and prey
+    pred_ctrl = load_network(PRED_PATH, config)
+
+    # prey_ctrl = load_network(PREY_PATH, config)
+    prey_ctrl = GreedyPreyDummy(env)
+
+
+    
 
     # run a single visualization episode
     ep = run_episode(pred_ctrl, prey_ctrl, env, T=500)

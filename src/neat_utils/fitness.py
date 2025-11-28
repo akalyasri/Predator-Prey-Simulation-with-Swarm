@@ -89,28 +89,27 @@ def predator_fitness(ep):
 
 def predator_fitness(ep):
     trace = ep.trace
-
-    # 1. BIG reward for capture
+    
+    # 1. Big reward for capture
     if ep.captured:
-        return 5000 + (500 - ep.steps) * 20
+        return 5000 + (500 - ep.steps) * 20   # strong incentive
 
-    # 2. Reward based on *average distance reduction per step*
-    distances = [t["distance"] for t in trace]
-    dist_change = distances[0] - np.mean(distances)
-    dist_reward = dist_change * 40  # strong weight
+    # 2. Sum of distance reductions each step
+    dist_reward = 0
+    for i in range(1, len(trace)):
+        prev = trace[i-1]["distance"]
+        curr = trace[i]["distance"]
+        dist_reward += (prev - curr)  # positive if closing in
 
-    # 3. Reward for movement (anti-freeze)
+    # make the distance progress matter
+    dist_reward *= 15
+
+    # 3. Movement bonus (tiny)
     predator_positions = np.array([t["pred_pos"] for t in trace])
     deltas = np.linalg.norm(np.diff(predator_positions, axis=0), axis=1)
-    movement_reward = np.sum(deltas) * 5
+    movement = np.sum(deltas) * 0.2   # VERY small
 
-    # 4. Penalty when distance increases
-    distance_penalty = 0
-    for i in range(1, len(distances)):
-        if distances[i] > distances[i-1]:
-            distance_penalty -= (distances[i] - distances[i-1]) * 10
-
-    return dist_reward + movement_reward + distance_penalty
+    return dist_reward + movement
 
 def prey_fitness(ep):
     # reward staying alive
