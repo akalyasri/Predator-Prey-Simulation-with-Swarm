@@ -24,7 +24,7 @@ def load_evolved_prey(config):
     with open(PREY_MODEL_PATH, "rb") as f:
         prey_genome = pickle.load(f)
 
-    prey_controller = make_controller(prey_genome, config, speed=1.8)
+    prey_controller = make_controller(prey_genome, config, speed=1.3)
     return prey_controller
 
 
@@ -36,7 +36,7 @@ def evaluate_genomes(genomes, config):
         genome.fitness = 0.0
 
         # build predator controller
-        predator_ctrl = make_controller(genome, config, speed=2.5)
+        predator_ctrl = make_controller(genome, config, speed=2)
 
         fitness_scores = []
 

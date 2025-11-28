@@ -82,8 +82,8 @@ def main():
     predator_genome = load_genome(PRED_PATH)
     prey_genome = load_genome(PREY_PATH)
 
-    predator_ctrl = make_controller(predator_genome, config, speed=3.2)
-    prey_ctrl = make_controller(prey_genome, config, speed=1.5)
+    predator_ctrl = make_controller(predator_genome, config, speed=2)
+    prey_ctrl = make_controller(prey_genome, config, speed=1.3)
 
     # run simulation
     env = Environment()

@@ -24,6 +24,8 @@ def make_controller(
     def controller(obs: Sequence[float]) -> Tuple[float, float]:
         v = _preprocess_obs(obs)
         out = net.activate(v)          # length = 2
+
+        
         # most activations are tanh/sigmoid; ensure safe bounds anyway
         vx = float(np.clip(out[0], -1.0, 1.0)) * speed
         vy = float(np.clip(out[1], -1.0, 1.0)) * speed

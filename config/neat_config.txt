@@ -9,7 +9,9 @@ pop_size              = 100
 fitness_criterion     = max
 
 # increased threshold from 1000 to 3000 to force evolution
-fitness_threshold     = 3000    
+fitness_threshold     = 20000 
+#changed from 3000    
+
 reset_on_extinction   = True
 no_fitness_termination = False
 

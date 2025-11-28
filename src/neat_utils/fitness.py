@@ -3,6 +3,7 @@
 # because NEAT will repeatedly call them thousands of times
 import numpy as np
 
+''''' too complex - as we are retraining pred
 def predator_fitness(ep):
     trace = ep.trace
     if len(trace) < 3:
@@ -42,6 +43,17 @@ def predator_fitness(ep):
         v2 = np.array(trace[i]["pred_pos"])   - np.array(trace[i-1]["pred_pos"])
         smooth_penalty += np.linalg.norm(v2 - v1)
 
+
+    # 5. penalty for standing still - should guarentee that the pred doesnt evolve a zero-movement strategy
+    stationary_penalty = 0.0
+    for i in range(1, len(trace)):
+        pred_move = np.linalg.norm(
+            np.array(trace[i]["pred_pos"]) - np.array(trace[i-1]["pred_pos"])
+        )
+        if pred_move < 0.1:
+            stationary_penalty += 0.2    # penalize freezing
+
+
     # weighted combination
     fitness = (
         3.0 * dist_reward +
@@ -52,7 +64,53 @@ def predator_fitness(ep):
 
     return float(fitness)
 
+'''
 
+''' too simple - but okay for first train
+def predator_fitness(ep):
+    # 1. Big reward for capture
+    if ep.captured:
+        return 2000 + (500 - ep.steps) * 5
+
+    # 2. Reward getting closer
+    start_d = ep.trace[0]["distance"]
+    end_d   = ep.trace[-1]["distance"]
+    distance_reward = (start_d - end_d) * 5
+
+    # 3. Reward movement (prevents freezing)
+    predator_positions = np.array([t["pred_pos"] for t in ep.trace])
+    deltas = np.linalg.norm(np.diff(predator_positions, axis=0), axis=1)
+    movement_reward = np.sum(deltas) * 2
+
+    return distance_reward + movement_reward
+
+    
+'''
+
+def predator_fitness(ep):
+    trace = ep.trace
+
+    # 1. BIG reward for capture
+    if ep.captured:
+        return 5000 + (500 - ep.steps) * 20
+
+    # 2. Reward based on *average distance reduction per step*
+    distances = [t["distance"] for t in trace]
+    dist_change = distances[0] - np.mean(distances)
+    dist_reward = dist_change * 40  # strong weight
+
+    # 3. Reward for movement (anti-freeze)
+    predator_positions = np.array([t["pred_pos"] for t in trace])
+    deltas = np.linalg.norm(np.diff(predator_positions, axis=0), axis=1)
+    movement_reward = np.sum(deltas) * 5
+
+    # 4. Penalty when distance increases
+    distance_penalty = 0
+    for i in range(1, len(distances)):
+        if distances[i] > distances[i-1]:
+            distance_penalty -= (distances[i] - distances[i-1]) * 10
+
+    return dist_reward + movement_reward + distance_penalty
 
 def prey_fitness(ep):
     # reward staying alive

@@ -22,12 +22,12 @@ class Agent:
         new_y = np.clip(new_y, 0, bounds[1])
 
         # if obstacles exist -> prevent movement into them
-        if obstacles:
-            for (ox, oy, w, h) in obstacles:
-
-                if ox <= new_x <= ox + w and oy <= new_y <= oy + h:
-                    # cancel movement 
-                    return
+        #if obstacles:
+        #    for (ox, oy, w, h) in obstacles:
+    
+        #        if ox <= new_x <= ox + w and oy <= new_y <= oy + h:
+        #            # cancel movement 
+         #           return
 
         self.x, self.y = new_x, new_y
 

@@ -20,12 +20,13 @@ def evaluate_genomes(genomes, config):
         genome.fitness = 0.0
 
         # build predator controller for this genome
-        predator_ctrl = make_controller(genome, config, speed=3.2)
+        predator_ctrl = make_controller(genome, config, speed=2.0)
+        #print("DEBUGGING: TRAINING predator speed =", 2.0)
 
         # run multiple episodes for stability
         episode_fitnesses = []
 
-        for _ in range(5):          # 5 episodes per genome
+        for _ in range(3):          # 5 episodes per genome  - changed to 3
             env = Environment(
                 num_obstacles=3,
                 min_r=4.0,
@@ -38,19 +39,21 @@ def evaluate_genomes(genomes, config):
                 predator_ctrl,
                 prey_ctrl,        # fixed prey
                 env,
-                T=400              # shorter than 500 to speed training
+                T=250              # shorter than 500 to speed training - cahnged to 250
             )
             
+            
+            # removed below block and replaced with predator fitness function
             # reward faster captures:
-            reward_capture = 400 if ep.captured else 0
-
+            # reward_capture = 400 if ep.captured else 0
             # reward getting closer (inverse distance)
-            reward_distance = max(0, 120 - ep.final_distance * 15)
-
+            # reward_distance = max(0, 120 - ep.final_distance * 15)
             # penalize long chases (we want efficient hunting)
-            reward_time = max(0, 300 - ep.steps)
-
-            fitness = reward_capture + reward_distance + reward_time
+            # reward_time = max(0, 300 - ep.steps)
+            # fitness = reward_capture + reward_distance + reward_time
+            
+            fitness = predator_fitness(ep)
+            
             episode_fitnesses.append(fitness)
 
 
@@ -75,7 +78,7 @@ def run_training():
     pop.add_reporter(stats)
 
     # run for 30 generations
-    winner = pop.run(evaluate_genomes, n=30)
+    winner = pop.run(evaluate_genomes, n=15) #- was 30 changed to 15
 
     # save best genome
     with open("results/predator_training/best_predator.pkl", "wb") as f:

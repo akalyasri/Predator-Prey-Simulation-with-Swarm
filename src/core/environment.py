@@ -29,17 +29,17 @@ class Environment:
         
 
 
-    def generate_obstacles(self):
+    #def generate_obstacles(self):
 
-        self.obstacles = []
+     #   self.obstacles = []
+#
+     #   for _ in range(self.num_obstacles):
 
-        for _ in range(self.num_obstacles):
-
-            w = np.random.uniform(5, 15)
-            h = np.random.uniform(5, 15)
-            x = np.random.uniform(0, self.width - w)
-            y = np.random.uniform(0, self.height - h)
-            self.obstacles.append((x, y, w, h))
+     #       w = np.random.uniform(5, 15)
+      #      h = np.random.uniform(5, 15)
+      #      x = np.random.uniform(0, self.width - w)
+      #      y = np.random.uniform(0, self.height - h)
+      #      self.obstacles.append((x, y, w, h))
 
     def reset(self):
 
@@ -65,7 +65,7 @@ class Environment:
             if not self.collides_with_obstacle(px, py):
                 break
 
-        self.predator = Agent(px, py, speed=2.5)
+        self.predator = Agent(px, py, speed=2.0)
 
         while True:
             qx = np.random.uniform(0, self.width)
@@ -73,7 +73,7 @@ class Environment:
             if not self.collides_with_obstacle(qx, qy):
                 break
 
-        self.prey = Agent(qx, qy, speed=1.5)
+        self.prey = Agent(qx, qy, speed=1.3)
 
     
             
@@ -198,7 +198,7 @@ class Environment:
         new_px = px + pred_action[0]
         new_py = py + pred_action[1]
 
-        if not self.collides_with_obstacle(new_px, new_py):
+        if not self.collides_with_obstacle(new_px, new_py, agent_radius=self.predator.radius):
             self.predator.move(*pred_action, bounds=(self.width, self.height))
 
         # try move prey
@@ -206,7 +206,7 @@ class Environment:
         new_qx = qx + prey_action[0]
         new_qy = qy + prey_action[1]
 
-        if not self.collides_with_obstacle(new_qx, new_qy):
+        if not self.collides_with_obstacle(new_qx, new_qy, agent_radius=self.prey.radius):
             self.prey.move(*prey_action, bounds=(self.width, self.height))
 
         

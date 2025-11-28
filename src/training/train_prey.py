@@ -18,7 +18,7 @@ os.makedirs("results/prey_training", exist_ok=True)
 def load_predator(config):
     with open(PREDATOR_MODEL_PATH, "rb") as f:
         predator_genome = pickle.load(f)
-    predator_ctrl = make_controller(predator_genome, config, speed=2.5)
+    predator_ctrl = make_controller(predator_genome, config, speed=2.0)
     return predator_ctrl
 
 
@@ -32,7 +32,7 @@ def evaluate_genomes(genomes, config):
     for gid, genome in genomes:
         genome.fitness = 0.0
 
-        prey_ctrl = make_controller(genome, config, speed=1.5)
+        prey_ctrl = make_controller(genome, config, speed=1.3)
         episode_scores = []
 
         for _ in range(5):   # evaluate each prey 5 times for stability
