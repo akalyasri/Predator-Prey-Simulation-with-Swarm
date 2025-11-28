@@ -26,7 +26,7 @@ def evaluate_genomes(genomes, config):
         # run multiple episodes for stability
         episode_fitnesses = []
 
-        for _ in range(3):          # 5 episodes per genome  - changed to 3
+        for _ in range(5):         
             env = Environment(
                 num_obstacles=3,
                 min_r=4.0,
@@ -39,7 +39,7 @@ def evaluate_genomes(genomes, config):
                 predator_ctrl,
                 prey_ctrl,        # fixed prey
                 env,
-                T=250              # shorter than 500 to speed training - cahnged to 250
+                T=400              
             )
             
             
@@ -78,7 +78,7 @@ def run_training():
     pop.add_reporter(stats)
 
     # run for 30 generations
-    winner = pop.run(evaluate_genomes, n=15) #- was 30 changed to 15
+    winner = pop.run(evaluate_genomes, n=30) 
 
     # save best genome
     with open("results/predator_training/best_predator.pkl", "wb") as f:

@@ -54,8 +54,8 @@ class GreedyPreyDummy:
         
     def __call__(self, obs):
 
-        dx = obs[0]  # direction away from predator
-        dy = obs[1]
+        dx = -obs[0]  # direction away from predator
+        dy = -obs[1]
 
         # base flee vector
         flee = np.array([dx, dy])

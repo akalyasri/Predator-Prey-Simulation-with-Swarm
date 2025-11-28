@@ -8,6 +8,8 @@ from src.core.simulation import run_episode
 from src.neat_utils.controllers import make_controller
 from src.visualizations.viz_utils import plot_episode_with_obstacles
 from src.neat_utils.dummy_controllers import GreedyPreyDummy
+from src.visualizations.animate_episode import animate_episode
+
 
 
 PRED_PATH = "results/predator_training/best_predator.pkl"
@@ -42,7 +44,7 @@ def main():
     # load trained predator and prey
     pred_ctrl = load_network(PRED_PATH, config)
 
-    # prey_ctrl = load_network(PREY_PATH, config)
+    #prey_ctrl = load_network(PREY_PATH, config)
     prey_ctrl = GreedyPreyDummy(env)
 
 
@@ -64,6 +66,10 @@ def main():
     out_path = "results/visualizations/pred_vs_prey.png"
     plot_episode_with_obstacles(ep, env, save_path=out_path)
     print(f"Saved visualization to {out_path}")
+
+    # save mp4 animation
+    # animate_episode(ep, env, save_path="results/visualizations/chase.mp4")
+
 
 
 if __name__ == "__main__":

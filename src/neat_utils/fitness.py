@@ -89,27 +89,76 @@ def predator_fitness(ep):
 
 def predator_fitness(ep):
     trace = ep.trace
+
+    if len(trace) < 3:
+        return 0.0
     
-    # 1. Big reward for capture
+    # 1. big reward for capture
     if ep.captured:
         return 5000 + (500 - ep.steps) * 20   # strong incentive
 
-    # 2. Sum of distance reductions each step
+
+
+    # 2. sum of distance reductions each step
+    start_d = trace[0]["distance"]
+    end_d = trace[-1]["distance"]
     dist_reward = 0
+
     for i in range(1, len(trace)):
         prev = trace[i-1]["distance"]
         curr = trace[i]["distance"]
         dist_reward += (prev - curr)  # positive if closing in
 
-    # make the distance progress matter
-    dist_reward *= 15
+    
+    dist_reward *= 15       # make the distance progress matter
 
-    # 3. Movement bonus (tiny)
+
+
+    # 3. movement bonus  - helps prevent freezing
     predator_positions = np.array([t["pred_pos"] for t in trace])
     deltas = np.linalg.norm(np.diff(predator_positions, axis=0), axis=1)
-    movement = np.sum(deltas) * 0.2   # VERY small
+    movement = np.sum(deltas) * 0.2  
 
-    return dist_reward + movement
+
+    # 4. heading alignment reward 
+    pred_pos = predator_positions[-1]
+    prev_pred_pos = predator_positions[-2]
+    move_vec = pred_pos - prev_pred_pos
+
+    prey_pos = np.array(trace[-1]["prey_pos"])
+    vec_to_prey = prey_pos - pred_pos
+
+
+    if np.linalg.norm(vec_to_prey) > 1e-6 and np.linalg.norm(move_vec) > 1e-6:
+        vec_to_prey = vec_to_prey / np.linalg.norm(vec_to_prey)
+        move_vec    = move_vec / np.linalg.norm(move_vec)
+        heading_reward = 3.0 * np.dot(move_vec, vec_to_prey)
+    else:
+        heading_reward = 0
+
+
+
+    # 5. penalty for increasing distance - prevents running away
+    distance_increase = max(0,end_d - start_d)
+    runaway_penalty = distance_increase * 2.0   # only negative if predator runs away
+
+
+
+    # 6. wall penalty (discourage staying near borders)
+    x, y = pred_pos
+    margin = 10
+    world_size = 100 
+
+    wall_pen = 0
+
+    if x < margin: wall_pen += (margin - x)
+    if x > (world_size - margin): wall_pen += (x - (world_size - margin))
+    if y < margin: wall_pen += (margin - y)
+    if y > (world_size - margin): wall_pen += (y - (world_size - margin))
+
+    wall_pen *= 0.5  
+
+    return dist_reward + movement + heading_reward - runaway_penalty - wall_pen
 
 def prey_fitness(ep):
     # reward staying alive
