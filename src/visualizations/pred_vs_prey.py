@@ -44,8 +44,8 @@ def main():
     # load trained predator and prey
     pred_ctrl = load_network(PRED_PATH, config)
 
-    #prey_ctrl = load_network(PREY_PATH, config)
-    prey_ctrl = GreedyPreyDummy(env)
+    prey_ctrl = load_network(PREY_PATH, config)
+    #prey_ctrl = GreedyPreyDummy(env)
 
 
     
@@ -68,7 +68,7 @@ def main():
     print(f"Saved visualization to {out_path}")
 
     # save mp4 animation
-    # animate_episode(ep, env, save_path="results/visualizations/chase.mp4")
+    animate_episode(ep, env, save_path="results/visualizations/chase4.mp4")
 
 
 
